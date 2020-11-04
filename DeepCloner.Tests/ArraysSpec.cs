@@ -6,9 +6,6 @@ using NUnit.Framework;
 
 namespace Force.DeepCloner.Tests
 {
-#if !NETCORE
-	[TestFixture(false)]
-#endif
 	[TestFixture(true)]
 	public class ArraysSpec : BaseTest
 	{

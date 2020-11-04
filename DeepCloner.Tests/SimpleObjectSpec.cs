@@ -158,36 +158,6 @@ namespace Force.DeepCloner.Tests
 			Assert.That(g.DeepClone(), Is.EqualTo(g));
 		}
 
-		private class UnsafeObject
-		{
-			[SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "Reviewed. Suppression is OK here.")]
-			public unsafe void* Void;
-
-			[SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "Reviewed. Suppression is OK here.")]
-			public unsafe int* Int;
-		}
-
-		[Test]
-		public void Unsafe_Should_Be_Cloned()
-		{
-			var u = new UnsafeObject();
-			var i = 1;
-			var j = 2;
-			unsafe
-			{
-				u.Int = &i;
-				u.Void = &i;
-			}
-			
-			var cloned = u.DeepClone();
-			unsafe
-			{
-				u.Int = &j;
-				Assert.That(cloned.Int == &i, Is.True);
-				Assert.That(cloned.Void == &i, Is.True);
-			}
-		}
-
 		[Test]
 		public void String_In_Class_Should_Not_Be_Cloned()
 		{

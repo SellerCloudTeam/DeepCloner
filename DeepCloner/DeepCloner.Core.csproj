@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <VersionPrefix>0.10.2</VersionPrefix>
-    <TargetFrameworks>netstandard1.3;net40</TargetFrameworks>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <AssemblyName>DeepCloner</AssemblyName>
     <!--DelaySign>true</DelaySign>

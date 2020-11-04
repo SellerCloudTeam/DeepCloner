@@ -25,9 +25,6 @@ namespace Force.DeepCloner.Helpers
 							// do not clone such native type
 							Type.GetType("System.RuntimeType"),
 							Type.GetType("System.RuntimeTypeHandle"),
-#if !NETCORE
-							typeof(DBNull)
-#endif
 						}) KnownTypes.TryAdd(x, true);
 		}
 
@@ -45,42 +42,6 @@ namespace Force.DeepCloner.Helpers
 				return true;
 			}
 
-#if !NETCORE
-			// do not do anything with remoting. it is very dangerous to clone, bcs it relate to deep core of framework
-			if (type.FullName.StartsWith("System.Runtime.Remoting.")
-				&& type.Assembly == typeof(System.Runtime.Remoting.CustomErrorsModes).Assembly)
-			{
-				KnownTypes.TryAdd(type, true);
-				return true;
-			}
-
-			if (type.FullName.StartsWith("System.Reflection.") && type.Assembly == typeof(PropertyInfo).Assembly)
-			{
-				KnownTypes.TryAdd(type, true);
-				return true;
-			}
-
-			// catched by previous condition
-			/*if (type.FullName.StartsWith("System.Reflection.Emit") && type.Assembly == typeof(System.Reflection.Emit.OpCode).Assembly)
-			{
-				KnownTypes.TryAdd(type, true);
-				return true;
-			}*/
-			
-			// this types are serious native resources, it is better not to clone it
-			if (type.IsSubclassOf(typeof(System.Runtime.ConstrainedExecution.CriticalFinalizerObject)))
-			{
-				KnownTypes.TryAdd(type, true);
-				return true;
-			}
-
-			// Better not to do anything with COM
-			if (type.IsCOMObject)
-			{
-				KnownTypes.TryAdd(type, true);
-				return true;
-			}
-#else
 			// do not copy db null
 			if (type.FullName.StartsWith("System.DBNull"))
 			{
@@ -100,11 +61,11 @@ namespace Force.DeepCloner.Helpers
 				return true;
 			}
 
-			if (type.IsSubclassOfTypeByName("CriticalFinalizerObject"))
-			{
-				KnownTypes.TryAdd(type, true);
-				return true;
-			}
+			//if (type.IsSubclassOfTypeByName("CriticalFinalizerObject"))
+			//{
+			//	KnownTypes.TryAdd(type, true);
+			//	return true;
+			//}
 			
 			// better not to touch ms dependency injection
 			if (type.FullName.StartsWith("Microsoft.Extensions.DependencyInjection."))
@@ -118,7 +79,6 @@ namespace Force.DeepCloner.Helpers
 				KnownTypes.TryAdd(type, true);
 				return true;
 			}
-#endif
 
 			// classes are always unsafe (we should copy it fully to count references)
 			if (!type.IsValueType())

@@ -178,12 +178,7 @@ namespace Force.DeepCloner.Helpers
 			if (DeepClonerSafeTypes.CanReturnSameObject(t) && (asObject && !t.IsValueType())) 
 				return null;
 
-#if !NETCORE
-			if (ShallowObjectCloner.IsSafeVariant()) return DeepClonerExprGenerator.GenerateClonerInternal(t, asObject);
-			else return DeepClonerMsilGenerator.GenerateClonerInternal(t, asObject);
-#else
 			return DeepClonerExprGenerator.GenerateClonerInternal(t, asObject);
-#endif
 		}
 
 		public static object CloneObjectTo(object objFrom, object objTo, bool isDeep)
